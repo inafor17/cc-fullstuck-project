@@ -1,4 +1,4 @@
-import { Box, Button, Card, Flex, Group, HStack, Input, InputAddon, Stack } from "@chakra-ui/react";
+import { Button, Card, Flex, Group, Input, InputAddon, Stack } from "@chakra-ui/react";
 import { Field } from "@/components/ui/field";
 import { useState } from "react";
 import { Tag } from "@/components/ui/tag";

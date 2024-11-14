@@ -1,15 +1,29 @@
-import { Flex } from "@chakra-ui/react";
-import Members from "../components/members/members";
-import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { Stack } from "@chakra-ui/react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export const Dashboard = () => {
   const { projectId } = useParams();
+  const navigate = useNavigate();
 
-  useEffect(() => {}, []);
+  const [projectName, setProjectName] = useState("");
+
+  useEffect(() => {
+    fetch(`/project/${projectId}`)
+      .then((res) => {
+        if (!res.ok) {
+          navigate("/404");
+          return;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setProjectName(data.name);
+      });
+  }, []);
   return (
-    <Flex gap="4" direction="column">
-      <Members />
-    </Flex>
+    <Stack>
+      <p>{projectName}</p>
+    </Stack>
   );
 };
