@@ -12,7 +12,7 @@ function NotFound() {
       <Text fontSize="lg" mb={4}>
         ページが見つかりません。
       </Text>
-      <Button colorScheme="teal" onClick={() => navigate("/project/new")}>
+      <Button onClick={() => navigate("/project/new")} color="white">
         プロジェクトを作成する
       </Button>
     </Box>
