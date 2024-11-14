@@ -1,7 +1,7 @@
 import db from "../db";
 
 export interface Project {
-  id: string;
+  id?: string;
   name: string;
 }
 

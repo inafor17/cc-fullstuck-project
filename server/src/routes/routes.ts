@@ -1,12 +1,10 @@
 import express from "express";
-import { createProject, getProjectById } from "../controllers/projectController";
+import { createProject, getProjectById, getMembersByProjectId } from "../controllers/projectController";
 
 const router = express.Router();
 
-// return { projectId: プロジェクトのID }
 router.post("/project", createProject);
-
-// return { projectId: プロジェクトのID, projectName: プロジェクトの名前 }
 router.get("/project/:projectId", getProjectById);
+router.get("/project/:projectId/members", getMembersByProjectId);
 
 export default router;
