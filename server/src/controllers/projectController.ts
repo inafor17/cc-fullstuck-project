@@ -22,4 +22,7 @@ export const createProject = async (req: Request, res: Response) => {
     projectId: projectId,
   }));
   await addMembers(members);
+
+  res.json({ projectId });
+  res.status(200).end();
 };
