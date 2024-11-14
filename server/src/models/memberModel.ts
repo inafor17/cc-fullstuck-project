@@ -3,7 +3,7 @@ import { Project } from "./projectModel";
 
 export interface Member {
   name: string;
-  projectId: Pick<Project, "id">;
+  projectId: string;
 }
 
 export const addMembers = async (members: Member[]) => {

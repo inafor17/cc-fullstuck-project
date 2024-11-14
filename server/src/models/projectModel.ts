@@ -6,6 +6,6 @@ export interface Project {
 }
 
 export const addProject = async (project: Project) => {
-  const [projectId] = await db<Project>("PROJECT").insert(project).returning("id");
-  return projectId;
+  const result = await db<Project>("PROJECT").insert(project).returning("id");
+  return result[0].id;
 };

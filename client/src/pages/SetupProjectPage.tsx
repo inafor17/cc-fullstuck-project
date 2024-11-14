@@ -11,6 +11,8 @@ export default function SetupProjectPage() {
   const [memberName, setMemberName] = useState<string>("");
   const [members, setMembers] = useState<string[]>([]);
 
+  const navigate = useNavigate();
+
   const handleGroupNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGroupName(e.target.value);
     setGroupNameIsError(e.target.value === "");
@@ -43,7 +45,7 @@ export default function SetupProjectPage() {
     let projectId = "";
 
     //TODO: APIを呼び出して、プロジェクトとそのメンバーを追加する。
-    fetch("/project", {
+    fetch("/api/project", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,12 +54,12 @@ export default function SetupProjectPage() {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         projectId = data.projectId;
       })
       .catch((error) => console.error("Fetch error:", error));
 
     //projectが作成できたらprojectIdが返ってくるので、それをもとにDashboardにリダイレクト
-    const navigate = useNavigate();
     navigate(`/dashboard/${projectId}`);
   };
 
