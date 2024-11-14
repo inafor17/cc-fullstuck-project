@@ -2,6 +2,7 @@ import { Box, Button, Card, Flex, Group, HStack, Input, InputAddon, Stack } from
 import { Field } from "@/components/ui/field";
 import { useState } from "react";
 import { Tag } from "@/components/ui/tag";
+import { useNavigate } from "react-router-dom";
 
 export default function SetupProjectPage() {
   const [groupName, setGroupName] = useState<string>("");
@@ -33,6 +34,33 @@ export default function SetupProjectPage() {
     }
   };
 
+  const createProject = () => {
+    const body = {
+      projectName: groupName,
+      members: members,
+    };
+
+    let projectId = "";
+
+    //TODO: APIを呼び出して、プロジェクトとそのメンバーを追加する。
+    fetch("/project", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        projectId = data.projectId;
+      })
+      .catch((error) => console.error("Fetch error:", error));
+
+    //projectが作成できたらprojectIdが返ってくるので、それをもとにDashboardにリダイレクト
+    const navigate = useNavigate();
+    navigate(`/dashboard/${projectId}`);
+  };
+
   return (
     <Card.Root maxW="sm">
       <Card.Header>
@@ -41,7 +69,7 @@ export default function SetupProjectPage() {
       </Card.Header>
       <Card.Body>
         <Stack gap="4" w="full">
-          <Field label="グループ名" required invalid={groupNameIsError} errorText="グループ名は必須項目です">
+          <Field label="プロジェクト名" required invalid={groupNameIsError} errorText="プロジェクト名は必須項目です">
             <Input value={groupName} onChange={(e) => handleGroupNameChange(e)} />
           </Field>
           <Field label="メンバー">
@@ -62,7 +90,7 @@ export default function SetupProjectPage() {
         </Stack>
       </Card.Body>
       <Card.Footer justifyContent="center">
-        <Button variant="outline" width="62%">
+        <Button variant="outline" width="62%" onClick={createProject}>
           作成
         </Button>
       </Card.Footer>
