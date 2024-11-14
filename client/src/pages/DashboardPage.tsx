@@ -9,7 +9,7 @@ export const Dashboard = () => {
   const [projectName, setProjectName] = useState("");
 
   useEffect(() => {
-    fetch(`/project/${projectId}`)
+    fetch(`/api/project/${projectId}`)
       .then((res) => {
         if (!res.ok) {
           navigate("/404");
@@ -18,9 +18,9 @@ export const Dashboard = () => {
         return res.json();
       })
       .then((data) => {
-        setProjectName(data.name);
+        setProjectName(data.projectName);
       });
-  }, []);
+  }, [projectId, navigate]);
   return (
     <Stack>
       <p>{projectName}</p>

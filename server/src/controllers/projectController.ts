@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { addMembers, Member } from "../models/memberModel";
-import { addProject, Project } from "../models/projectModel";
+import { addProject, findProjectById, Project } from "../models/projectModel";
 
 const { ulid } = require("ulid");
 
@@ -25,4 +25,21 @@ export const createProject = async (req: Request, res: Response) => {
 
   res.json({ projectId });
   res.status(200).end();
+};
+
+export const getProjectById = async (req: Request, res: Response) => {
+  const projectId = req.params.projectId as string;
+  try {
+    const project = await findProjectById(projectId);
+    if (project) {
+      res.json({
+        projectId: project.id,
+        projectName: project.name,
+      });
+    } else {
+      res.status(404).end();
+    }
+  } catch (error) {
+    //TODO
+  }
 };
