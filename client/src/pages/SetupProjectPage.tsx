@@ -56,11 +56,11 @@ export default function SetupProjectPage() {
       .then((data) => {
         console.log(data);
         projectId = data.projectId;
+
+        //projectが作成できたらprojectIdが返ってくるので、それをもとにDashboardにリダイレクト
+        navigate(`/dashboard/${projectId}`);
       })
       .catch((error) => console.error("Fetch error:", error));
-
-    //projectが作成できたらprojectIdが返ってくるので、それをもとにDashboardにリダイレクト
-    navigate(`/dashboard/${projectId}`);
   };
 
   return (
