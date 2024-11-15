@@ -45,3 +45,26 @@ export const getPaymentsByProjectId = async (projectId: String) => {
     throw new Error("Failed to fetch payments");
   }
 };
+
+export const getPaymentById = async (paymentId: number): Promise<Payment | null> => {
+  try {
+    const payment = await db("PAYMENT")
+      .where({ id: paymentId })
+      .select("id as paymentId", "payerId", "amount", "description", "timestamp")
+      .first();
+
+    if (!payment) {
+      return null;
+    }
+
+    const payees = await db("PAYMENT_PAYEE").where("paymentId", paymentId).select("payeeId");
+
+    return {
+      ...payment,
+      payeeIds: payees.map((p) => p.payeeId),
+    };
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to fetch payment");
+  }
+};

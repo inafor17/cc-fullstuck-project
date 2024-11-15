@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addPayment, getPaymentsByProjectId, Payment } from "../models/paymentModel";
+import { addPayment, getPaymentById, getPaymentsByProjectId, Payment } from "../models/paymentModel";
 import { addPaymentPayeeList, PaymentPayee } from "../models/paymentPayeeModel";
 
 export const createPayment = async (req: Request, res: Response) => {
@@ -29,7 +29,7 @@ export const createPayment = async (req: Request, res: Response) => {
   res.status(200).end();
 };
 
-export const getProjectsByProjectId = async (req: Request, res: Response) => {
+export const getPaymentsByProjectIdController = async (req: Request, res: Response) => {
   const projectId = req.params.projectId as string;
 
   try {
@@ -37,5 +37,27 @@ export const getProjectsByProjectId = async (req: Request, res: Response) => {
     res.status(200).json({ payments });
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch payments" });
+  }
+};
+
+export const getPayment = async (req: Request, res: Response): Promise<void> => {
+  const paymentId = parseInt(req.params.paymentId, 10);
+
+  if (isNaN(paymentId)) {
+    res.status(400).json({ error: "Invalid paymentId" });
+    return;
+  }
+
+  try {
+    const payment = await getPaymentById(paymentId);
+
+    if (!payment) {
+      res.status(404).json({ error: "Payment not found" });
+      return;
+    }
+
+    res.status(200).json(payment);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch payment" });
   }
 };
