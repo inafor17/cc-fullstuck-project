@@ -35,3 +35,18 @@
 
 - リクエストボディ: `{payerId: 支払った人のID, payeeIds: 支払われた人のIDの配列, amount: 金額, description: 支払いの説明}`
 - レスポンスボディ: `{paymentId: 立替記録のID}`
+
+### GET `/project/:projectId/payments`
+
+指定した `projectId` のプロジェクトに属する立替記録の情報を取得する
+
+- リクエストボディ: なし
+- レスポンスボディ: `{payments: 立替記録の配列}`
+  - 立替記録: `{paymentId: 立替記録のID, payerId: 支払った人のID, payeeIds: 支払われた人のIDの配列, amount: 金額, description: 支払いの説明}`
+
+### GET `/payment/:paymentId`
+
+指定した `paymentId` の立替記録の情報を取得する
+
+- リクエストボディ: なし
+- レスポンスボディ: `{paymentId: 立替記録のID, payerId: 支払った人のID, payeeIds: 支払われた人のIDの配列, amount: 金額, description: 支払いの説明}`

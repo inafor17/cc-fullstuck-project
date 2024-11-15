@@ -24,7 +24,6 @@ export default function SetupProjectPage() {
 
     let projectId = "";
 
-    //TODO: APIを呼び出して、プロジェクトとそのメンバーを追加する。
     fetch("/api/project", {
       method: "POST",
       headers: {

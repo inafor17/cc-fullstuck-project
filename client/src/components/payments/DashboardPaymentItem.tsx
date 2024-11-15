@@ -43,9 +43,18 @@ type Props = {
 
 export default function DashboardPaymentItem(props: Props) {
   const { members } = props;
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [description, setDescription] = useState<string>("");
+  const [descriptionIsError, setDescriptionIsError] = useState<boolean>(false);
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setDescription(e.target.value);
+    setDescriptionIsError(e.target.value === "");
+  };
 
   const [payer, setPayer] = useState<string | undefined>(members[0].memberId?.toString());
 
@@ -78,7 +87,28 @@ export default function DashboardPaymentItem(props: Props) {
     } else setAmountIsError(false);
   };
 
-  const createPayment = () => {};
+  const createPayment = async () => {
+    const body = {
+      payerId: parseInt(payer!),
+      payeeIds: members.filter((_, i) => checkedItems[i]).map((member) => member.memberId),
+      amount: parseInt(amount),
+      description,
+    };
+
+    await fetch("/api/payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      });
+
+    await fetch(`/api/project/${projectId}/payments`).then();
+  };
 
   return (
     <Stack>
@@ -121,9 +151,19 @@ export default function DashboardPaymentItem(props: Props) {
                 <Typography gutterBottom variant="h6" component="div">
                   立替の追加
                 </Typography>
-                {/* <Typography variant="body2" sx={{ color: "text.secondary", textAlign: "left" }}>
-                  割り勘ボードをセットアップするために、以下の情報を入力してください。
-                </Typography> */}
+
+                <InputLabel htmlFor="project-name-input" sx={{ marginTop: 2, marginBottom: 1 }}>
+                  立替の内容
+                </InputLabel>
+                <TextField
+                  id="project-name-input"
+                  variant="outlined"
+                  sx={{ width: "100%" }}
+                  error={descriptionIsError}
+                  helperText={descriptionIsError && "プロジェクト名は必須項目です"}
+                  value={description}
+                  onChange={(e) => handleDescriptionChange(e)}
+                />
                 <InputLabel htmlFor="demo-sample-select-label" sx={{ marginTop: 2, marginBottom: 1 }}>
                   支払った人
                 </InputLabel>

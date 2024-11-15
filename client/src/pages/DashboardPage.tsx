@@ -11,6 +11,14 @@ export type Member = {
   memberName: string;
 };
 
+export type Payment = {
+  paymentId: 立替記録のID;
+  payerId: 支払った人のID;
+  payeeIds: 支払われた人のIDの配列;
+  amount: 金額;
+  description: 支払いの説明;
+};
+
 export const Dashboard = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
@@ -23,6 +31,8 @@ export const Dashboard = () => {
   // const [open, setOpen] = useState(false);
   // const handleModalOpen = () => setOpen(true);
   // const handleModalClose = () => setOpen(false);
+
+  const [payments, setPayments] = useState([]);
 
   useEffect(() => {
     const fetchProjectData = async () => {
@@ -47,6 +57,20 @@ export const Dashboard = () => {
 
     fetchProjectData();
   }, [projectId, navigate]);
+
+  useEffect(() => {
+    const fetchPaymentData = async () => {
+      try {
+        const paymentResponse = await fetch(`/api/project/${projectId}/payments`);
+        if (!paymentResponse.ok) throw new Error();
+
+        const paymentData = await paymentResponse.json();
+        setPayments(paymentData);
+      } catch (error) {
+        navigate("/404");
+      }
+    };
+  }, []);
 
   return (
     <Container
