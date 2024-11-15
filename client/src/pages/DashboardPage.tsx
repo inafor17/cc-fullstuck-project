@@ -1,10 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Card, CardContent, Stack } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
+import { Box, CircularProgress, Container, Typography } from "@mui/material";
+// import { Card, CardContent, Modal, Stack, Typography } from "@mui/material";
+import DashboardMemberItem from "@/components/members/DashboardMemberItem";
+import DashboardPaymentItem from "@/components/payments/DashboardPaymentItem";
+// import MemberInput from "@/components/MemberInput";
 
-type Member = {
-  memberId: number;
+export type Member = {
+  memberId?: number;
   memberName: string;
 };
 
@@ -15,44 +18,64 @@ export const Dashboard = () => {
   const [projectName, setProjectName] = useState("");
   const [members, setMembers] = useState<Member[]>([]);
 
-  useEffect(() => {
-    fetch(`/api/project/${projectId}`)
-      .then((res) => {
-        if (!res.ok) {
-          navigate("/404");
-          return;
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setProjectName(data.projectName);
-      });
+  const [isLoading, setIsLoading] = useState(true);
 
-    fetch(`/api/project/${projectId}/members`)
-      .then((res) => {
-        if (!res.ok) {
-          navigate("/404");
-          return;
-        }
-        return res.json();
-      })
-      .then((data) => setMembers(data.members));
+  // const [open, setOpen] = useState(false);
+  // const handleModalOpen = () => setOpen(true);
+  // const handleModalClose = () => setOpen(false);
+
+  useEffect(() => {
+    const fetchProjectData = async () => {
+      try {
+        const projectResponse = await fetch(`/api/project/${projectId}`);
+        if (!projectResponse.ok) throw new Error();
+
+        const projectData = await projectResponse.json();
+        setProjectName(projectData.projectName);
+
+        const membersResponse = await fetch(`/api/project/${projectId}/members`);
+        if (!membersResponse.ok) throw new Error();
+
+        const membersData = await membersResponse.json();
+        setMembers(membersData.members);
+      } catch (error) {
+        navigate("/404");
+      } finally {
+        setIsLoading(false); // ローディング終了
+      }
+    };
+
+    fetchProjectData();
   }, [projectId, navigate]);
 
   return (
-    <Stack>
-      <p>{projectName}</p>
-      <h3>メンバー</h3>
-      <Stack direction="row" gap={2}>
-        {members.map((member) => {
-          return <Card sx={{ width: 420, padding: 4 }}>{member.memberName}</Card>;
-        })}
-        <Card sx={{ width: 420, padding: 4 }}>
-          <CardContent>
-            <AddIcon fontSize="large" />
-          </CardContent>
-        </Card>
-      </Stack>
-    </Stack>
+    <Container
+      maxWidth={false} // ContainerのデフォルトのmaxWidthを無効化
+      sx={{
+        width: {
+          xs: "90%", // 小さな画面サイズでは幅90%
+          sm: "80%", // 中程度の画面サイズでは幅80%
+          lg: "70%", // lgのときに幅70%
+          xl: "60%", // xlのときに幅60%
+        },
+        margin: "auto", // コンテンツを中央に配置
+      }}
+    >
+      <Typography variant="h2">{projectName}</Typography>
+      {isLoading ? (
+        <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
+          <CircularProgress /> {/* ローディング中にぐるぐるアイコンを表示 */}
+        </Box>
+      ) : (
+        <>
+          <DashboardMemberItem members={members} />
+          <DashboardPaymentItem members={members} />
+        </>
+      )}
+
+      {/* <Modal open={open} onClose={handleModalClose}>
+        <MemberInput members={members} setMembers={setMembers}/>
+      </Modal> */}
+    </Container>
   );
 };

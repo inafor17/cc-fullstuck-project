@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Card, CardActions, CardContent, InputLabel, Stack, TextField, Typography } from "@mui/material";
-import MemberInput from "@/components/MemberInput";
+import MemberInput from "@/components/members/MemberInput";
 
 export default function SetupProjectPage() {
   const [groupName, setGroupName] = useState<string>("");
@@ -44,10 +44,10 @@ export default function SetupProjectPage() {
   };
 
   return (
-    <Card sx={{ width: 420 }}>
+    <Card sx={{ width: 420, margin: "0 auto" }}>
       <CardContent>
         <Stack alignItems="flex-start" width="100%" padding={4}>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h6" component="div">
             WariWari
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary", textAlign: "left" }}>
