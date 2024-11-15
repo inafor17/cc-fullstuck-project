@@ -6,6 +6,7 @@ export interface Member {
   id?: string;
   name: string;
   projectId: string;
+  tiltWeight: number;
 }
 
 export const addMembers = async (members: Member[]) => {

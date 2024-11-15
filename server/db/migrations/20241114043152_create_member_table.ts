@@ -7,6 +7,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string("projectId").notNullable();
 
     table.foreign("projectId").references("id").inTable("PROJECT").onDelete("CASCADE");
+    table.integer("tiltWeight").notNullable().checkBetween([1, 10]);
   });
 }
 
