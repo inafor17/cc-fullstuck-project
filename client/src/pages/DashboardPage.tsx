@@ -12,11 +12,12 @@ export type Member = {
 };
 
 export type Payment = {
-  paymentId: 立替記録のID;
-  payerId: 支払った人のID;
-  payeeIds: 支払われた人のIDの配列;
-  amount: 金額;
-  description: 支払いの説明;
+  paymentId: number;
+  payerId: number;
+  amount: number;
+  description: string;
+  payeeIds: number[];
+  timestamp: string;
 };
 
 export const Dashboard = () => {
@@ -32,7 +33,7 @@ export const Dashboard = () => {
   // const handleModalOpen = () => setOpen(true);
   // const handleModalClose = () => setOpen(false);
 
-  const [payments, setPayments] = useState([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
 
   useEffect(() => {
     const fetchProjectData = async () => {
@@ -65,12 +66,13 @@ export const Dashboard = () => {
         if (!paymentResponse.ok) throw new Error();
 
         const paymentData = await paymentResponse.json();
-        setPayments(paymentData);
+        setPayments(paymentData.payments);
       } catch (error) {
         navigate("/404");
       }
     };
-  }, []);
+    fetchPaymentData();
+  }, [projectId, navigate]);
 
   return (
     <Container
@@ -93,7 +95,7 @@ export const Dashboard = () => {
       ) : (
         <>
           <DashboardMemberItem members={members} />
-          <DashboardPaymentItem members={members} />
+          <DashboardPaymentItem members={members} payments={payments} setPayments={setPayments} />
         </>
       )}
 

@@ -26,8 +26,8 @@ import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import { TimelineOppositeContent } from "@mui/lab";
-import { ChangeEvent, useState } from "react";
-import { Member } from "@/pages/DashboardPage";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { Member, Payment } from "@/pages/DashboardPage";
 
 const style = {
   position: "absolute",
@@ -39,10 +39,23 @@ const style = {
 
 type Props = {
   members: Member[];
+  payments: Payment[];
+  setPayments: Dispatch<SetStateAction<Payment[]>>;
+};
+
+const formatDate = (isoString: string): string => {
+  const date = new Date(isoString);
+
+  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // 月を2桁
+  const day = date.getDate().toString().padStart(2, "0"); // 日を2桁
+  const hours = date.getHours().toString().padStart(2, "0"); // 時を2桁
+  const minutes = date.getMinutes().toString().padStart(2, "0"); // 分を2桁
+
+  return `${month}/${day} ${hours}:${minutes}`;
 };
 
 export default function DashboardPaymentItem(props: Props) {
-  const { members } = props;
+  const { members, payments, setPayments } = props;
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -95,6 +108,8 @@ export default function DashboardPaymentItem(props: Props) {
       description,
     };
 
+    let paymentId;
+
     await fetch("/api/payment", {
       method: "POST",
       headers: {
@@ -104,38 +119,45 @@ export default function DashboardPaymentItem(props: Props) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        paymentId = data.paymentId;
       });
 
-    await fetch(`/api/project/${projectId}/payments`).then();
+    console.log(paymentId);
+
+    // await fetch(`/api/payment/${paymentId}`).then(res => res.json())
+    // .then(data => {
+    //     setPayments(prevPayments => [...prevPayments, data])
+    // })
   };
 
   return (
     <Stack>
       <h3>立替の記録</h3>
       <Timeline>
+        {payments.map((payment) => (
+          <TimelineItem>
+            <TimelineOppositeContent color="textSecondary">{formatDate(payment.timestamp)}</TimelineOppositeContent>
+            <TimelineSeparator>
+              <TimelineDot />
+              <TimelineConnector />
+            </TimelineSeparator>
+
+            <TimelineContent>
+              {payment.description}
+              <Typography variant="body2" sx={{ color: "text.secondary", textAlign: "left" }}>
+                {members.filter((member) => member.memberId === payment.payerId)[0].memberName} が {payment.amount}{" "}
+                円支払った
+              </Typography>
+            </TimelineContent>
+          </TimelineItem>
+        ))}
         <TimelineItem>
           <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
+            <Button onClick={handleOpen} variant="outlined" sx={{ width: "144px" }}>
+              立替を追加する
+            </Button>
           </TimelineSeparator>
-          <TimelineContent>Eat</TimelineContent>
-        </TimelineItem>
-        <TimelineItem>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>Code</TimelineContent>
-        </TimelineItem>
-        <TimelineItem>
-          <TimelineOppositeContent color="textSecondary">12/01 09:30</TimelineOppositeContent>
-          <TimelineSeparator>
-            <TimelineDot />
-          </TimelineSeparator>
-          <TimelineContent>
-            <Button onClick={handleOpen}>立替を追加する</Button>
-          </TimelineContent>
+          <TimelineContent></TimelineContent>
         </TimelineItem>
       </Timeline>
       <Modal
