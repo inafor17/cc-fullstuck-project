@@ -8,13 +8,13 @@ declare module "knex" {
   }
 
   interface Member {
-    id: number;
+    id?: number;
     projectId: string;
     name: string;
   }
 
   interface Payment {
-    id: number;
+    id?: number;
     payerId: number;
     payeeId: number;
     amount: number;
