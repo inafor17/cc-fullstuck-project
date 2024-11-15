@@ -132,12 +132,14 @@ export default function DashboardPaymentItem(props: Props) {
   };
 
   return (
-    <Stack>
+    <Stack marginTop={4}>
       <h3>立替記録</h3>
-      <Timeline>
+      <Timeline sx={{ padding: 0 }}>
         {payments.map((payment) => (
           <TimelineItem key={payment.paymentId}>
-            <TimelineOppositeContent color="textSecondary">{formatDate(payment.timestamp)}</TimelineOppositeContent>
+            <TimelineOppositeContent color="textSecondary" sx={{ flex: "0 0 auto", paddingLeft: 0 }}>
+              {formatDate(payment.timestamp)}
+            </TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineDot />
               <TimelineConnector />
@@ -147,12 +149,16 @@ export default function DashboardPaymentItem(props: Props) {
               {payment.description}
               <Typography variant="body2" sx={{ color: "text.secondary", textAlign: "left" }}>
                 {members.filter((member) => member.memberId === payment.payerId)[0].memberName} が {payment.amount}{" "}
-                円支払った
+                円支払い
               </Typography>
             </TimelineContent>
           </TimelineItem>
         ))}
         <TimelineItem>
+          <TimelineOppositeContent
+            color="textSecondary"
+            sx={{ flex: "0 0 auto", width: "36px" }}
+          ></TimelineOppositeContent>
           <TimelineSeparator>
             <Button onClick={handleOpen} variant="outlined" sx={{ width: "144px" }}>
               立替を追加する
