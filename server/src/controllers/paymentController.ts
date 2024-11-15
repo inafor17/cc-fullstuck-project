@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addPayment, Payment } from "../models/paymentModel";
+import { addPayment, getPaymentsByProjectId, Payment } from "../models/paymentModel";
 import { addPaymentPayeeList, PaymentPayee } from "../models/paymentPayeeModel";
 
 export const createPayment = async (req: Request, res: Response) => {
@@ -27,4 +27,15 @@ export const createPayment = async (req: Request, res: Response) => {
   await addPaymentPayeeList(paymentPayeeList);
   res.json({ paymentId });
   res.status(200).end();
+};
+
+export const getProjectsByProjectId = async (req: Request, res: Response) => {
+  const projectId = req.params.projectId as string;
+
+  try {
+    const payments = await getPaymentsByProjectId(projectId);
+    res.status(200).json({ payments });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch payments" });
+  }
 };
