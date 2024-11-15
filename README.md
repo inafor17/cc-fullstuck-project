@@ -1,5 +1,11 @@
 # cc-fullstuck-project
 
+# Client
+
+割り勘アプリ
+
+# Server
+
 ## API エンドポイント一覧
 
 ### POST `/project`
@@ -22,3 +28,10 @@
 
 - リクエストボディ：なし
 - レスポンスボディ： `{memberId: メンバーのID, members: メンバー名の配列}`
+
+### POST `/payment`
+
+立替記録を追加する
+
+- リクエストボディ: `{payerId: 支払った人のID, payeeIds: 支払われた人のIDの配列, amount: 金額, description: 支払いの説明}`
+- レスポンスボディ: `{paymentId: 立替記録のID}`
