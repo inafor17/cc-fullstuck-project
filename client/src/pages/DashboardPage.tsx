@@ -11,6 +11,7 @@ import DashboardTiltMemberItem from "@/components/members/DashboardTiltMemberIte
 export type Member = {
   memberId?: number;
   memberName: string;
+  tiltWeight: number;
 };
 
 export type Payment = {
