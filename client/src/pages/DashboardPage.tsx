@@ -1,6 +1,7 @@
-import { Stack } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Card, CardContent, Stack } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 
 type Member = {
   memberId: number;
@@ -41,9 +42,17 @@ export const Dashboard = () => {
   return (
     <Stack>
       <p>{projectName}</p>
-      {members.map((member) => (
-        <div key={member.memberId}>{member.memberName}</div>
-      ))}
+      <h3>メンバー</h3>
+      <Stack direction="row" gap={2}>
+        {members.map((member) => {
+          return <Card sx={{ width: 420, padding: 4 }}>{member.memberName}</Card>;
+        })}
+        <Card sx={{ width: 420, padding: 4 }}>
+          <CardContent>
+            <AddIcon fontSize="large" />
+          </CardContent>
+        </Card>
+      </Stack>
     </Stack>
   );
 };

@@ -1,39 +1,19 @@
-import { Button, Card, Flex, Group, Input, InputAddon, Stack } from "@chakra-ui/react";
-import { Field } from "@/components/ui/field";
 import { useState } from "react";
-import { Tag } from "@/components/ui/tag";
 import { useNavigate } from "react-router-dom";
+import { Box, Button, Card, CardActions, CardContent, InputLabel, Stack, TextField, Typography } from "@mui/material";
+import MemberInput from "@/components/MemberInput";
 
 export default function SetupProjectPage() {
   const [groupName, setGroupName] = useState<string>("");
   const [groupNameIsError, setGroupNameIsError] = useState(false);
 
-  const [memberName, setMemberName] = useState<string>("");
   const [members, setMembers] = useState<string[]>([]);
 
   const navigate = useNavigate();
 
-  const handleGroupNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleGroupNameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setGroupName(e.target.value);
     setGroupNameIsError(e.target.value === "");
-  };
-
-  const addMember = () => {
-    if (memberName === "") return;
-    else {
-      setMembers((prevMember) => [...prevMember, memberName]);
-      setMemberName("");
-    }
-  };
-
-  const deleteMember = (i: number) => {
-    setMembers((prevMember) => prevMember.filter((_, index) => index !== i));
-  };
-
-  const detectEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      addMember();
-    }
   };
 
   const createProject = () => {
@@ -64,38 +44,37 @@ export default function SetupProjectPage() {
   };
 
   return (
-    <Card.Root maxW="sm">
-      <Card.Header>
-        <Card.Title>WariWari</Card.Title>
-        <Card.Description>割り勘ボードをセットアップするために、以下の情報を入力してください。</Card.Description>
-      </Card.Header>
-      <Card.Body>
-        <Stack gap="4" w="full">
-          <Field label="プロジェクト名" required invalid={groupNameIsError} errorText="プロジェクト名は必須項目です">
-            <Input value={groupName} onChange={(e) => handleGroupNameChange(e)} />
-          </Field>
-          <Field label="メンバー">
-            <Group attached display="flex" width="100%">
-              <Input value={memberName} onChange={(e) => setMemberName(e.target.value)} onKeyDown={detectEnterKey} />
-              <InputAddon onClick={addMember} style={{ cursor: "pointer" }}>
-                追加
-              </InputAddon>
-            </Group>
-          </Field>
-          <Flex wrap="wrap" gap="2">
-            {members.map((member, i) => (
-              <Tag key={i} size="lg" closable onClose={() => deleteMember(i)}>
-                {member}
-              </Tag>
-            ))}
-          </Flex>
+    <Card sx={{ width: 420 }}>
+      <CardContent>
+        <Stack alignItems="flex-start" width="100%" padding={4}>
+          <Typography gutterBottom variant="h5" component="div">
+            WariWari
+          </Typography>
+          <Typography variant="body2" sx={{ color: "text.secondary", textAlign: "left" }}>
+            割り勘ボードをセットアップするために、以下の情報を入力してください。
+          </Typography>
+          <InputLabel htmlFor="project-name-input" sx={{ marginTop: 2, marginBottom: 1 }}>
+            プロジェクト名
+          </InputLabel>
+          <TextField
+            id="project-name-input"
+            variant="outlined"
+            sx={{ width: "100%" }}
+            error={groupNameIsError}
+            helperText={groupNameIsError && "プロジェクト名は必須項目です"}
+            value={groupName}
+            onChange={(e) => handleGroupNameChange(e)}
+          />
+          <MemberInput members={members} setMembers={setMembers} />
+
+          <Box marginTop={4} alignItems="center" width="100%">
+            <Button size="large" onClick={createProject} variant="outlined" sx={{ width: "100%" }}>
+              作成
+            </Button>
+          </Box>
         </Stack>
-      </Card.Body>
-      <Card.Footer justifyContent="center">
-        <Button variant="outline" width="62%" onClick={createProject}>
-          作成
-        </Button>
-      </Card.Footer>
-    </Card.Root>
+      </CardContent>
+      <CardActions></CardActions>
+    </Card>
   );
 }
