@@ -4,6 +4,7 @@ import { Box, CircularProgress, Container, Typography } from "@mui/material";
 // import { Card, CardContent, Modal, Stack, Typography } from "@mui/material";
 import DashboardMemberItem from "@/components/members/DashboardMemberItem";
 import DashboardPaymentItem from "@/components/payments/DashboardPaymentItem";
+import DashboardSettlementItem from "@/components/settlement/DashboardSettlementItem";
 // import MemberInput from "@/components/MemberInput";
 
 export type Member = {
@@ -95,6 +96,8 @@ export const Dashboard = () => {
       ) : (
         <>
           <DashboardMemberItem members={members} />
+          {payments.length !== 0 && <DashboardSettlementItem payments={payments} members={members} />}
+
           <DashboardPaymentItem members={members} payments={payments} setPayments={setPayments} />
         </>
       )}

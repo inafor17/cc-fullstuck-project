@@ -124,18 +124,19 @@ export default function DashboardPaymentItem(props: Props) {
 
     console.log(paymentId);
 
-    // await fetch(`/api/payment/${paymentId}`).then(res => res.json())
-    // .then(data => {
-    //     setPayments(prevPayments => [...prevPayments, data])
-    // })
+    await fetch(`/api/payment/${paymentId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setPayments((prevPayments) => [...prevPayments, data]);
+      });
   };
 
   return (
     <Stack>
-      <h3>立替の記録</h3>
+      <h3>立替記録</h3>
       <Timeline>
         {payments.map((payment) => (
-          <TimelineItem>
+          <TimelineItem key={payment.paymentId}>
             <TimelineOppositeContent color="textSecondary">{formatDate(payment.timestamp)}</TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineDot />
