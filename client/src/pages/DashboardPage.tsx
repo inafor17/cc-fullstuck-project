@@ -115,7 +115,9 @@ export const Dashboard = () => {
             <DashboardMemberItem members={members} />
           )}
 
-          {payments.length !== 0 && <DashboardSettlementItem payments={payments} members={members} />}
+          {payments.length !== 0 && (
+            <DashboardSettlementItem payments={payments} members={members} isTiltMode={isTiltMode} />
+          )}
 
           <DashboardPaymentItem members={members} payments={payments} setPayments={setPayments} />
         </>
