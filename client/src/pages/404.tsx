@@ -5,7 +5,7 @@ function NotFound() {
   const navigate = useNavigate();
 
   return (
-    <Card sx={{ width: 420 }}>
+    <Card sx={{ width: 420, margin: "0 auto" }}>
       <CardContent>
         <Stack alignItems="flex-start" width="100%" padding={4}>
           <Typography gutterBottom variant="h5" component="div">

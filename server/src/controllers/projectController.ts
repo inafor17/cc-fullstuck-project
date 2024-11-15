@@ -20,6 +20,7 @@ export const createProject = async (req: Request, res: Response) => {
   const members: Member[] = body.members.map((member) => ({
     name: member,
     projectId: projectId,
+    tiltWeight: 1,
   })) as Member[];
   await addMembers(members);
 
@@ -52,6 +53,7 @@ export const getMembersByProjectId = async (req: Request, res: Response) => {
       const resMembers = members.map((member) => ({
         memberId: member.id,
         memberName: member.name,
+        tiltWeight: member.tiltWeight,
       }));
       res.json({
         members: resMembers,

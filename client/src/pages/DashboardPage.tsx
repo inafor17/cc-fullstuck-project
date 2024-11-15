@@ -1,16 +1,17 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Box, CircularProgress, Container, Typography, useMediaQuery } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { Box, CircularProgress, Container, FormControlLabel, Stack, Switch, Typography } from "@mui/material";
 // import { Card, CardContent, Modal, Stack, Typography } from "@mui/material";
 import DashboardMemberItem from "@/components/members/DashboardMemberItem";
 import DashboardPaymentItem from "@/components/payments/DashboardPaymentItem";
 import DashboardSettlementItem from "@/components/settlement/DashboardSettlementItem";
+import DashboardTiltMemberItem from "@/components/members/DashboardTiltMemberItem";
 // import MemberInput from "@/components/MemberInput";
 
 export type Member = {
   memberId?: number;
   memberName: string;
+  tiltWeight: number;
 };
 
 export type Payment = {
@@ -31,13 +32,13 @@ export const Dashboard = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const isWideScreen = useMediaQuery("min-width:600px");
-
   // const [open, setOpen] = useState(false);
   // const handleModalOpen = () => setOpen(true);
   // const handleModalClose = () => setOpen(false);
 
   const [payments, setPayments] = useState<Payment[]>([]);
+
+  const [isTiltMode, setIsTiltMode] = useState(false);
 
   useEffect(() => {
     const fetchProjectData = async () => {
@@ -89,20 +90,34 @@ export const Dashboard = () => {
           xl: "60%", // xlのときに幅60%
         },
         margin: "auto", // コンテンツを中央に配置
+        paddingTop: 20,
+        paddingBottom: 20,
       }}
     >
-      <Typography variant="h4" component="h1">
-        {projectName}
-      </Typography>
+      <Stack>
+        <Typography variant="h4" component="h1">
+          {projectName}
+        </Typography>
+        <FormControlLabel
+          control={<Switch onChange={(e) => setIsTiltMode(e.target.checked)} checked={isTiltMode} />}
+          label="傾斜モード"
+        />
+      </Stack>
       {isLoading ? (
         <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
           <CircularProgress /> {/* ローディング中にぐるぐるアイコンを表示 */}
         </Box>
       ) : (
         <>
-          <DashboardMemberItem members={members} />
-          <Grid container={isWideScreen} direction={isWideScreen ? "row" : "column"} spacing={2}></Grid>
-          {payments.length !== 0 && <DashboardSettlementItem payments={payments} members={members} />}
+          {isTiltMode ? (
+            <DashboardTiltMemberItem members={members} setMembers={setMembers} />
+          ) : (
+            <DashboardMemberItem members={members} />
+          )}
+
+          {payments.length !== 0 && (
+            <DashboardSettlementItem payments={payments} members={members} isTiltMode={isTiltMode} />
+          )}
 
           <DashboardPaymentItem members={members} payments={payments} setPayments={setPayments} />
         </>

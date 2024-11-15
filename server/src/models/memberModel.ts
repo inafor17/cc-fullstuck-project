@@ -6,6 +6,7 @@ export interface Member {
   id?: string;
   name: string;
   projectId: string;
+  tiltWeight: number;
 }
 
 export const addMembers = async (members: Member[]) => {
@@ -15,4 +16,8 @@ export const addMembers = async (members: Member[]) => {
 export const findMembersByProjectId = async (projectId: string) => {
   const members = await db<Member>("MEMBER").where({ projectId }).select();
   return members;
+};
+
+export const updateMember = async (id: string, tiltWeight: number) => {
+  await db<Member>("MEMBER").where({ id }).update({ tiltWeight });
 };

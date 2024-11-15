@@ -50,3 +50,10 @@
 
 - リクエストボディ: なし
 - レスポンスボディ: `{paymentId: 立替記録のID, payerId: 支払った人のID, payeeIds: 支払われた人のIDの配列, amount: 金額, description: 支払いの説明, timestamp: タイムスタンプ}`
+
+### PATCH `/members/:memberId`
+
+指定した `memberId` の一部情報を書き換える
+
+- リクエストボディ: `{tiltWeight: 傾斜の重み}`
+- レスポンスボディ: なし

@@ -1,7 +1,4 @@
-import { Card, CardContent, Stack, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
-// import { Card, CardContent, Modal, Stack, Typography } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
+import { Stack } from "@mui/material";
 import { Member } from "@/pages/DashboardPage";
 import { useEffect, useRef, useState } from "react";
 
@@ -22,7 +19,7 @@ export default function DashboardMemberItem(props: Props) {
 
   return (
     <Stack>
-      <h4>{members.map((member) => member.memberName).join("・")}</h4>
+      <h4 style={{ marginBottom: 0 }}>{members.map((member) => member.memberName).join("・")}</h4>
       {/* <h3>メンバー</h3>
       <Grid container spacing={2}>
         {members.map((member, i) => {
