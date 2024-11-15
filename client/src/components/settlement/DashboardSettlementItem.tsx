@@ -82,7 +82,7 @@ export default function DashboardSettlementItem(props: Props) {
       <h3>精算方法</h3>
       <Grid container spacing={2}>
         {liquidation.map((liq, i) => (
-          <Grid size={4} key={i}>
+          <Grid size={{ xs: 6, sm: 4, md: 3 }} key={i}>
             <Card sx={{ padding: 4 }}>
               <Typography variant="subtitle1">
                 {members.filter((member) => member.memberId === liq.debtor)[0].memberName}

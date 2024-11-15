@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Box, CircularProgress, Container, Typography } from "@mui/material";
+import { Box, CircularProgress, Container, Typography, useMediaQuery } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 // import { Card, CardContent, Modal, Stack, Typography } from "@mui/material";
 import DashboardMemberItem from "@/components/members/DashboardMemberItem";
 import DashboardPaymentItem from "@/components/payments/DashboardPaymentItem";
@@ -29,6 +30,8 @@ export const Dashboard = () => {
   const [members, setMembers] = useState<Member[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
+
+  const isWideScreen = useMediaQuery("min-width:600px");
 
   // const [open, setOpen] = useState(false);
   // const handleModalOpen = () => setOpen(true);
@@ -88,7 +91,9 @@ export const Dashboard = () => {
         margin: "auto", // コンテンツを中央に配置
       }}
     >
-      <Typography variant="h2">{projectName}</Typography>
+      <Typography variant="h4" component="h1">
+        {projectName}
+      </Typography>
       {isLoading ? (
         <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
           <CircularProgress /> {/* ローディング中にぐるぐるアイコンを表示 */}
@@ -96,6 +101,7 @@ export const Dashboard = () => {
       ) : (
         <>
           <DashboardMemberItem members={members} />
+          <Grid container={isWideScreen} direction={isWideScreen ? "row" : "column"} spacing={2}></Grid>
           {payments.length !== 0 && <DashboardSettlementItem payments={payments} members={members} />}
 
           <DashboardPaymentItem members={members} payments={payments} setPayments={setPayments} />
