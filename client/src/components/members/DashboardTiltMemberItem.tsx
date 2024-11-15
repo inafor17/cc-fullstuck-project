@@ -2,10 +2,11 @@ import { Member } from "@/pages/DashboardPage";
 import { Box, Card, Menu, MenuItem, Stack, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { green, orange, red } from "@mui/material/colors";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 type Props = {
   members: Member[];
+  setMembers: Dispatch<SetStateAction<Member[]>>;
 };
 
 const getBadgeColor = (tiltLevel: number) => {
@@ -22,7 +23,7 @@ const getBadgeColor = (tiltLevel: number) => {
 };
 
 export default function DashboardTiltMemberItem(props: Props) {
-  const { members } = props;
+  const { members, setMembers } = props;
 
   // メニューの状態を管理する
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -41,22 +42,27 @@ export default function DashboardTiltMemberItem(props: Props) {
   };
 
   const handleMenuItemClick = async (num: number) => {
-    console.log(selectedMember);
-    console.log(num);
-
     const body = {
-      memberId: selectedMember?.memberId,
-      memberName: selectedMember?.memberName,
       tiltWeight: num,
     };
 
-    await fetch("/api/member/${memberId}", {
-      method: "PUT",
+    await fetch(`/api/members/${selectedMember?.memberId}`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
     });
+
+    setMembers((prevMembers) =>
+      prevMembers.map((member) => {
+        if (member.memberId === selectedMember?.memberId) {
+          return { ...member, tiltWeight: num };
+        } else {
+          return member;
+        }
+      })
+    );
 
     handleClose();
   };

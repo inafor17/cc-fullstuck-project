@@ -3,7 +3,7 @@ import { Project } from "./projectModel";
 import { Knex } from "knex";
 
 export interface Member {
-  id?: number;
+  id?: string;
   name: string;
   projectId: string;
   tiltWeight: number;
@@ -18,6 +18,6 @@ export const findMembersByProjectId = async (projectId: string) => {
   return members;
 };
 
-export const updateMember = async (id: number, tiltWeight: number) => {
+export const updateMember = async (id: string, tiltWeight: number) => {
   await db<Member>("MEMBER").where({ id }).update({ tiltWeight });
 };

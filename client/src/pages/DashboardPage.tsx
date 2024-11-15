@@ -109,7 +109,11 @@ export const Dashboard = () => {
         </Box>
       ) : (
         <>
-          {isTiltMode ? <DashboardTiltMemberItem members={members} /> : <DashboardMemberItem members={members} />}
+          {isTiltMode ? (
+            <DashboardTiltMemberItem members={members} setMembers={setMembers} />
+          ) : (
+            <DashboardMemberItem members={members} />
+          )}
 
           {payments.length !== 0 && <DashboardSettlementItem payments={payments} members={members} />}
 
